@@ -1,7 +1,7 @@
 import discord
 import random
 import pyjokes
-import youtube_dl
+from yt_dlp import YoutubeDL
 import asyncio
 import os
 from collections import deque
@@ -45,6 +45,20 @@ async def on_message(message):
         await message.channel.send("tu puta madre")
 
     elif message.content.startswith('!play'):
+        if message.content.startswith('!playeame'):
+            if not message.guild.voice_client is not None:
+                try:
+                    channel = message.author.voice.channel
+                    await channel.connect()
+                except discord.errors.ClientException:
+                    pass
+            else:
+                voice_client = message.guild.voice_client
+                if voice_client.is_playing():
+                    voice_client.stop()
+            voice_client = message.guild.voice_client
+            source = discord.FFmpegPCMAudio("song.mp3")
+            voice_client.play(source)
         url = message.content[6:]
         if not url:
             await message.channel.send("Tete pero donde esta el link?")
@@ -62,7 +76,7 @@ async def on_message(message):
             except discord.errors.ClientException:
                 pass
         else:
-            await message.channel.send("Añadido a la coloise")
+            await play_music(message)
 
     elif message.content.startswith('!skip'):
         if message.guild.voice_client is not None:
@@ -123,7 +137,7 @@ async def play_music(message):
         'format':
         'bestaudio/best',
         'outtmpl':
-        'song.mp3',
+        'song',
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -131,16 +145,17 @@ async def play_music(message):
         }],
     }
 
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    with YoutubeDL(ydl_opts) as ydl:
         if os.path.exists('song.mp3'):
             os.remove('song.mp3')
         success = False
         while not success:
             try:
-                info = ydl.extract_info(url, download=True)
-                filename = ydl.prepare_filename(info)
+                #info = ydl.extract_info(url, download=True)
+                #filename = ydl.prepare_filename(info)
+                ydl.download(url)
                 voice_client = message.guild.voice_client
-                source = discord.FFmpegPCMAudio(filename)
+                source = discord.FFmpegPCMAudio('song.mp3')
                 voice_client.play(source)
             except:
                 success = False
