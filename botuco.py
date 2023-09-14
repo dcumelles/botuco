@@ -6,10 +6,12 @@ import asyncio
 import os
 from collections import deque
 from dotenv import load_dotenv
+import openai
+import requests
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
-
+YOUTUBE_API_KEY=os.getenv('YOUTUBE_API_KEY')
 bot = discord.Client(intents=discord.Intents.all())
 
 # create a deque to store the songs in the queue
@@ -125,6 +127,25 @@ async def on_message(message):
         source = discord.FFmpegPCMAudio("vitas.mp3")
         voice_client.play(source)
 
+    elif message.content.startswith('!busca'):
+        busqueda = message.content[7:]
+        if not busqueda:
+            await message.channel.send("Tete pero que busco?")
+            return
+        y_url = f"https://www.googleapis.com/youtube/v3/search?q={busqueda}&type=video&part=snippet&key={YOUTUBE_API_KEY}"
+        response = requests.get(url=y_url).json()
+        video_id = response['items'][0]['id']['videoId']
+        video_url = f"https://www.youtube.com/watch?v={video_id}"    
+        songs_queue.append(video_url)
+        if not message.guild.voice_client is not None:
+            try:
+                channel = message.author.voice.channel
+                await channel.connect()
+                await play_music(message)
+            except discord.errors.ClientException:
+                pass
+        else:
+            await play_music(message)
 
 async def play_music(message):
     if not songs_queue:
