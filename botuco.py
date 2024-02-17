@@ -6,8 +6,8 @@ import asyncio
 import os
 from collections import deque
 from dotenv import load_dotenv
-import openai
 import requests
+from io import BytesIO
 
 load_dotenv()
 API_TOKEN = os.getenv('API_TOKEN')
@@ -36,8 +36,8 @@ async def on_message(message):
     elif message.content.startswith('botuco pa que se saca la pistola?'):
         await message.channel.send("la pistola se saca pa disparar el que la saca panseñal·la es un parguela")
 
-    elif 'xD' in message.content or 'jaja' in message.content:
-        await message.channel.send('te rie??¿!?')
+    #elif 'xD' in message.content or 'jaja' in message.content and not message.content.startswith('!play'):
+    #    await message.channel.send('te rie??¿!?')
 
     elif message.content.startswith('!chiste'):
         joke = pyjokes.get_joke(language='es', category='all')
@@ -137,6 +137,9 @@ async def on_message(message):
         video_id = response['items'][0]['id']['videoId']
         video_url = f"https://www.youtube.com/watch?v={video_id}"    
         songs_queue.append(video_url)
+        await message.channel.send(f"He encontrao esto: {response['items'][0]['snippet']['title']}")
+        response = requests.get(response['items'][0]['snippet']['thumbnails']['default']['url'])
+        await message.channel.send(file=discord.File(BytesIO(response.content), filename='thumbnail.png'))
         if not message.guild.voice_client is not None:
             try:
                 channel = message.author.voice.channel
@@ -146,6 +149,8 @@ async def on_message(message):
                 pass
         else:
             await play_music(message)
+        
+        
 
 async def play_music(message):
     if not songs_queue:
