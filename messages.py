@@ -18,7 +18,7 @@ async def handle_escoge(message: Message, msg_args: str):
     await message.channel.send(choice)
 
 
-async def handle_chiste(message: Message):
+async def handle_chiste(message: Message, msg_args: str):
     joke = pyjokes.get_joke(language='es', category='all')
     await message.channel.send(joke)
 
@@ -46,7 +46,7 @@ async def handle_busca(message: Message, msg_args: str):
     await handle_play(message, url)
 
 
-async def handle_stop(message: Message):
+async def handle_stop(message: Message, msg_args: str):
     if message.guild.voice_client is not None:
         voice_client = message.guild.voice_client
         if voice_client.is_playing():
@@ -54,23 +54,23 @@ async def handle_stop(message: Message):
         await voice_client.disconnect()
     await message.channel.send("nos vemoooos... chochito😘")
 
-async def handle_halloween(message: Message):
+async def handle_halloween(message: Message, msg_args: str):
     await play_file(message, "halloween.mp3")
 
 
-async def handle_skippy(message: Message):
+async def handle_skippy(message: Message, msg_args: str):
     await play_file(message, "skippy.mp3")
 
 
-async def handle_lostios(message: Message):
+async def handle_lostios(message: Message, msg_args: str):
     await play_file(message, "lostios.mp3")
 
 
-async def handle_alig(message: Message):
+async def handle_alig(message: Message, msg_args: str):
     await play_file(message, "alig.mp3")
 
 
-async def handle_vitas(message: Message):
+async def handle_vitas(message: Message, msg_args: str):
     await play_file(message, "vitas.mp3")
 
 
