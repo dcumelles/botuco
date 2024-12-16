@@ -43,7 +43,7 @@ async def handle_busca(message: Message, msg_args: str):
         await message.channel.send("Tete pero que busco?")
         return
     url = await search_youtube(message, msg_args)
-    handle_play(message, url)
+    await handle_play(message, url)
 
 
 async def handle_stop(message: Message):
