@@ -3,3 +3,5 @@ discord
 yt_dlp
 yapf
 python-dotenv
+requests
+pynacl

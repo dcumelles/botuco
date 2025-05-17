@@ -5,3 +5,7 @@
 
 botuco
 prueba.py
+
+venv
+
+*.pyc

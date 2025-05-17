@@ -74,6 +74,14 @@ async def handle_vitas(message: Message, msg_args: str):
     await play_file(message, "vitas.mp3")
 
 
+async def handle_lotr(message: Message, msg_args: str):
+    await play_file(message, "lotr.mp3")
+
+
+async def handle_playeame(message: Message, msg_args: str):
+    await play_file(message, "song.mp3")
+
+
 command_map = {
     '!escoge': handle_escoge,
     '!chiste': handle_chiste,
@@ -84,5 +92,7 @@ command_map = {
     '!skippy': handle_skippy,
     '!lostios': handle_lostios,
     '!alig': handle_alig,
-    '!vitas': handle_vitas
+    '!vitas': handle_vitas,
+    '!lotr': handle_lotr,
+    '!playeame': handle_playeame,
 }

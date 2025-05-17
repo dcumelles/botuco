@@ -1,7 +1,7 @@
 from yt_dlp import YoutubeDL  
 import os
 
-url = "https://www.youtube.com/watch?v=S-_UYzYpY7U&ab_channel=JovaniTV"
+url = "https://www.youtube.com/watch?v=OT8yiy3nqq4"
 ydl_opts = {
         'debug':
         True,
